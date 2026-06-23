@@ -35,7 +35,7 @@ export function DataProvider({ children }) {
       favoritesObj[user.id || user._id] = favData.favorites.map(f => f.classId?._id || f.classId);
     }
 
-    const myBookings = bookData?.bookings || [];
+    const myBookings = bookData || [];
 
     return {
       classes: seedClasses,

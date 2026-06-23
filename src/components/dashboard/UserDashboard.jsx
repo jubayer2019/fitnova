@@ -88,15 +88,13 @@ export default function UserDashboard() {
               {myBookings.length === 0 ? (
                 <tr><td colSpan={5} className="px-5 py-12 text-center text-muted-foreground">No bookings yet — explore classes to get started.</td></tr>
               ) : myBookings.map((b) => {
-                const c = b.classId || {};
-                const t = c.trainerId || {};
                 return (
                   <tr key={b._id || b.id} className="border-t border-border">
-                    <td className="px-5 py-3"><Link href={`/classes/${c._id || ""}`} className="font-medium hover:text-primary">{c.title || "—"}</Link></td>
-                    <td className="px-5 py-3 text-muted-foreground">{t.name || "—"}</td>
+                    <td className="px-5 py-3"><Link href={`/classes/${b.classId || ""}`} className="font-medium hover:text-primary">{b.className || b.classId?.title || "—"}</Link></td>
+                    <td className="px-5 py-3 text-muted-foreground">{b.trainerName || b.classId?.trainerName || "—"}</td>
                     <td className="px-5 py-3 text-muted-foreground">{new Date(b.createdAt).toLocaleDateString()}</td>
                     <td className="px-5 py-3 font-mono text-xs text-muted-foreground">{(b._id || b.id).slice(-6).toUpperCase()}</td>
-                    <td className="px-5 py-3 text-right font-medium">{fmtMoney(b.amount)}</td>
+                    <td className="px-5 py-3 text-right font-medium">{fmtMoney(b.price || b.amount || 0)}</td>
                   </tr>
                 );
               })}

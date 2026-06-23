@@ -120,7 +120,7 @@ export default function ClassDetails() {
             <p className="text-3xl font-bold">{fmtMoney(cls.price)}<span className="ml-1 text-sm font-normal text-muted-foreground">/ session</span></p>
 
             <div className="mt-6 space-y-3">
-              <Button onClick={onBook} variant="hero" size="lg" className="w-full" disabled={booked}>
+              <Button onClick={onBook} variant={booked ? "success" : "hero"} size="lg" className={`w-full ${booked ? "bg-success hover:bg-success text-success-foreground opacity-100 cursor-not-allowed" : ""}`} disabled={booked}>
                 {booked ? "Already booked" : "Book now"}
               </Button>
               <Button onClick={onFav} variant="outline" size="lg" className="w-full">
