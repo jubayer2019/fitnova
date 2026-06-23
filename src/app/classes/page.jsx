@@ -28,7 +28,7 @@ export default function AllClasses() {
     queryFn: () => getPublicClasses({ search: q, category: cat === 'all' ? '' : cat, sort, page: 1, limit: 100 }),
   });
 
-  const classes = data?.classes || [];
+  const classes = data?.data || [];
 
   const filtered = useMemo(() => {
     let arr = classes;

@@ -27,8 +27,8 @@ export default function Home() {
   const { data: classData } = useQuery({ queryKey: ['classes'], queryFn: () => getPublicClasses({ limit: 10 }) });
   const { data: postData } = useQuery({ queryKey: ['posts'], queryFn: () => getPosts({ limit: 4 }) });
 
-  const classes = classData?.classes || [];
-  const posts = postData?.posts || [];
+  const classes = classData?.data || [];
+  const posts = postData?.data || [];
 
   const top = [...classes].sort((a, b) => (b.bookingsCount || 0) - (a.bookingsCount || 0)).slice(0, 6);
   const latest = posts.slice(0, 4);

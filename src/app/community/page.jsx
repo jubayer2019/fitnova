@@ -29,7 +29,7 @@ export default function Community() {
     queryFn: () => getPosts({ search: q, category: cat === 'all' ? '' : cat, page, limit: PER_PAGE })
   });
 
-  const posts = data?.posts || [];
+  const posts = data?.data || [];
   const totalPages = data?.totalPages || 1;
   const pageItems = posts;
 
