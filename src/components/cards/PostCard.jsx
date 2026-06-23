@@ -25,7 +25,7 @@ export default function PostCard({ post, author }) {
             </div>
           </div>
           <div className="flex items-center gap-3 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1"><ThumbsUp className="h-3.5 w-3.5" /> {post.likes?.length || 0}</span>
+            <span className="flex items-center gap-1"><ThumbsUp className="h-3.5 w-3.5" /> {post.likes || 0}</span>
             <Link href={`/community/${post._id || post.id}`} className="flex items-center gap-1 text-primary hover:underline">
               Read <ArrowRight className="h-3.5 w-3.5" />
             </Link>

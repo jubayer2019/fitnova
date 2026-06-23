@@ -100,10 +100,10 @@ export default function ForumPostDetails() {
 
         <div className="mt-8 flex items-center gap-2">
           <Button onClick={() => handleReact("like")} variant={reactedWithLike ? "subtle" : "outline"}>
-            <ThumbsUp className="h-4 w-4" /> {post.likes?.length || 0}
+            <ThumbsUp className="h-4 w-4" /> {post.likes || 0}
           </Button>
           <Button onClick={() => handleReact("dislike")} variant={reactedWithDislike ? "subtle" : "outline"}>
-            <ThumbsDown className="h-4 w-4" /> {post.dislikes?.length || 0}
+            <ThumbsDown className="h-4 w-4" /> {post.dislikes || 0}
           </Button>
           <span className="ml-auto inline-flex items-center gap-1 text-sm text-muted-foreground">
             <MessageSquare className="h-4 w-4" /> {postComments.length} comments
@@ -139,7 +139,7 @@ export default function ForumPostDetails() {
                         <p className="text-sm font-medium">{u?.name} <span className="ml-2 text-xs text-muted-foreground">{c.createdAt}</span></p>
                         {isMine && (
                           <div className="flex gap-1">
-                            <button className="rounded-md p-1.5 text-muted-foreground hover:bg-muted" onClick={() => { setEditId(c._id || c.id); setEditText(c.text); }}>
+                            <button className="rounded-md p-1.5 text-muted-foreground hover:bg-muted" onClick={() => { setEditId(c._id || c.id); setEditText(c.body); }}>
                               <Pencil className="h-3.5 w-3.5" />
                             </button>
                             <button className="rounded-md p-1.5 text-destructive hover:bg-muted" onClick={() => { deleteComment(c._id || c.id); toast.success("Comment deleted"); }}>
@@ -157,7 +157,7 @@ export default function ForumPostDetails() {
                           </div>
                         </div>
                       ) : (
-                        <p className="mt-2 text-sm text-foreground/90">{c.text}</p>
+                        <p className="mt-2 text-sm text-foreground/90">{c.body}</p>
                       )}
                     </div>
                   </div>
