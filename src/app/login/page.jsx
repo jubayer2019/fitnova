@@ -86,8 +86,12 @@ function LoginForm() {
           </form>
 
           <div className="my-6 flex items-center gap-3 text-xs uppercase tracking-wider text-muted-foreground">
-            <div className="h-px flex-1 bg-border" />
+            <div className="h-px flex-1 bg-border" /> or <div className="h-px flex-1 bg-border" />
           </div>
+
+          <Button variant="outline" size="lg" className="w-full" onClick={handleGoogleSignIn}>
+            <GoogleIcon /> Continue with Google
+          </Button>
 
           <p className="mt-6 text-center text-sm text-muted-foreground">
             New to FitNova? <Link href="/register" className="font-medium text-primary hover:underline">Create an account</Link>
