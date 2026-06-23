@@ -327,7 +327,7 @@ export default function AdminDashboard() {
               ) : posts.map((p) => (
                 <tr key={p._id} className="border-t border-border">
                   <td className="px-5 py-3 font-medium line-clamp-1">{p.title}</td>
-                  <td className="px-5 py-3 text-muted-foreground">{p.authorId?.name || "—"}</td>
+                  <td className="px-5 py-3 text-muted-foreground">{p.authorName || p.authorId?.name || "—"}</td>
                   <td className="px-5 py-3 text-muted-foreground">{p.category}</td>
                   <td className="px-5 py-3">{p.likes?.length || 0}</td>
                   <td className="px-5 py-3 text-right">
@@ -354,8 +354,8 @@ export default function AdminDashboard() {
               ) : bookings.map((b) => (
                 <tr key={b._id} className="border-t border-border">
                   <td className="px-5 py-3 font-mono text-xs">{b._id.slice(-6).toUpperCase()}</td>
-                  <td className="px-5 py-3">{b.userId?.name || "—"}</td>
-                  <td className="px-5 py-3 text-muted-foreground">{b.classId?.title || "—"}</td>
+                  <td className="px-5 py-3">{b.userId?.name || b.userEmail || b.userId || "—"}</td>
+                  <td className="px-5 py-3 text-muted-foreground">{b.className || b.classId?.title || "—"}</td>
                   <td className="px-5 py-3 text-muted-foreground">{new Date(b.createdAt).toLocaleDateString()}</td>
                   <td className="px-5 py-3 text-right font-medium">{fmtMoney(b.amount)}</td>
                 </tr>
