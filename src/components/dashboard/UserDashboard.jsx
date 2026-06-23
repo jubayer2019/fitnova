@@ -6,6 +6,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Heart, Calendar, MessageSquare, Award } from "lucide-react";
 import toast from "react-hot-toast";
 import Badge from "../../components/ui/Badge.jsx";
+import Spinner from "../../components/ui/Spinner.jsx";
 import Button from "../../components/ui/Button.jsx";
 import { Input, Label, Textarea } from "../../components/ui/Input.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
@@ -27,10 +28,12 @@ export default function UserDashboard() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
-  const { data: myBookings = [] } = useQuery({ queryKey: ["user", "bookings"], queryFn: getMyBookings });
-  const { data: myFavorites = [] } = useQuery({ queryKey: ["user", "favorites"], queryFn: getMyFavorites });
-  const { data: myComments = [] } = useQuery({ queryKey: ["user", "comments"], queryFn: getMyComments });
-  const { data: myApp = null } = useQuery({ queryKey: ["user", "trainerApp"], queryFn: getMyTrainerApplication });
+  const { data: myBookings = [], isLoading: isBookings } = useQuery({ queryKey: ["user", "bookings"], queryFn: getMyBookings });
+  const { data: myFavorites = [], isLoading: isFavs } = useQuery({ queryKey: ["user", "favorites"], queryFn: getMyFavorites });
+  const { data: myComments = [], isLoading: isComments } = useQuery({ queryKey: ["user", "comments"], queryFn: getMyComments });
+  const { data: myApp = null, isLoading: isApp } = useQuery({ queryKey: ["user", "trainerApp"], queryFn: getMyTrainerApplication });
+
+  const isLoading = isBookings || isFavs || isComments || isApp;
 
   const [form, setForm] = useState({ specialty: "", experience: "", bio: "" });
 
@@ -51,6 +54,8 @@ export default function UserDashboard() {
     if (myApp) return toast.error("Application already submitted.");
     mutApply.mutate(form);
   };
+
+  if (isLoading) return <Spinner className="mt-20" />;
 
   return (
     <div className="space-y-8">

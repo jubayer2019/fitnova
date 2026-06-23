@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import Button from "../../../components/ui/Button.jsx";
 import Badge from "../../../components/ui/Badge.jsx";
 import ClassCard from "../../../components/cards/ClassCard.jsx";
+import Spinner from "../../../components/ui/Spinner.jsx";
 import { useData } from "../../../context/DataContext.jsx";
 import { useAuth } from "../../../context/AuthContext.jsx";
 import { useQuery } from "@tanstack/react-query";
@@ -29,7 +30,7 @@ export default function ClassDetails() {
     queryFn: () => getPublicClasses({ category: cls?.category, limit: 4 }),
     enabled: !!cls?.category
   });
-  if (isLoading) return <div className="p-24 text-center">Loading class details...</div>;
+  if (isLoading) return <Spinner className="p-24" size="h-10 w-10" />;
 
   if (!cls) {
     return (

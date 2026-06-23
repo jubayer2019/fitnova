@@ -5,6 +5,7 @@ import { Search, ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
 import Badge from "../../components/ui/Badge.jsx";
 import { Input, Select, Textarea, Label } from "../../components/ui/Input.jsx";
 import Button from "../../components/ui/Button.jsx";
+import Spinner from "../../components/ui/Spinner.jsx";
 import PostCard from "../../components/cards/PostCard.jsx";
 import ImageUpload from "../../components/ImageUpload.jsx";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -74,11 +75,19 @@ export default function Community() {
         )}
       </div>
 
-      <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {pageItems.map((p) => {
-          return <PostCard key={p._id || p.id} post={p} author={p.authorId || {}} />;
-        })}
-      </div>
+      {isLoading ? (
+        <Spinner className="mt-16" />
+      ) : pageItems.length === 0 ? (
+        <div className="mt-16 rounded-2xl border border-dashed border-border p-16 text-center text-muted-foreground">
+          No posts found.
+        </div>
+      ) : (
+        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {pageItems.map((p) => {
+            return <PostCard key={p._id || p.id} post={p} author={p.authorId || {}} />;
+          })}
+        </div>
+      )}
 
       {totalPages > 1 && (
         <div className="mt-10 flex items-center justify-center gap-2">

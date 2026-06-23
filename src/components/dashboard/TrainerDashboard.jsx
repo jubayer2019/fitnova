@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Plus, Users, BookOpen, Eye, Trash2, MessageSquare } from "lucide-react";
 import toast from "react-hot-toast";
 import Badge from "../../components/ui/Badge.jsx";
+import Spinner from "../../components/ui/Spinner.jsx";
 import Button from "../../components/ui/Button.jsx";
 import Modal from "../../components/ui/Modal.jsx";
 import { Input, Label, Select, Textarea } from "../../components/ui/Input.jsx";
@@ -16,9 +17,11 @@ export default function TrainerDashboard() {
   const { user, allUsers } = useAuth();
   const queryClient = useQueryClient();
 
-  const { data: myClasses = [] } = useQuery({ queryKey: ["trainer", "classes"], queryFn: getMyClasses });
-  const { data: myPosts = [] } = useQuery({ queryKey: ["trainer", "posts"], queryFn: getMyPosts });
-  const { data: myBookings = [] } = useQuery({ queryKey: ["trainer", "bookings"], queryFn: getTrainerBookings });
+  const { data: myClasses = [], isLoading: isClasses } = useQuery({ queryKey: ["trainer", "classes"], queryFn: getMyClasses });
+  const { data: myPosts = [], isLoading: isPosts } = useQuery({ queryKey: ["trainer", "posts"], queryFn: getMyPosts });
+  const { data: myBookings = [], isLoading: isBookings } = useQuery({ queryKey: ["trainer", "bookings"], queryFn: getTrainerBookings });
+
+  const isLoading = isClasses || isPosts || isBookings;
 
   const studentsByClass = (classId) => myBookings.filter((b) => b.classId && b.classId._id === classId).map((b) => b.userId).filter(Boolean);
   const totalStudents = myClasses.reduce((acc, c) => acc + studentsByClass(c._id).length, 0);
@@ -73,6 +76,8 @@ export default function TrainerDashboard() {
     e.preventDefault();
     mutAddPost.mutate({ ...postForm, image: postForm.image || "https://images.unsplash.com/photo-1517438476312-10d79c5f2b03?auto=format&fit=crop&w=900&q=70" });
   };
+
+  if (isLoading) return <Spinner className="mt-20" />;
 
   return (
     <div className="space-y-8">

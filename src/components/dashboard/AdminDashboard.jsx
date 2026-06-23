@@ -4,6 +4,7 @@ import { Users, DollarSign, BookOpen, MessageSquare, Check, X, Trash2, Ban, Shie
 import toast from "react-hot-toast";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid, PieChart, Pie, Cell, Legend } from "recharts";
 import Badge from "../../components/ui/Badge.jsx";
+import Spinner from "../../components/ui/Spinner.jsx";
 import Button from "../../components/ui/Button.jsx";
 import Modal from "../../components/ui/Modal.jsx";
 import { Input, Label, Select, Textarea } from "../../components/ui/Input.jsx";
@@ -33,12 +34,14 @@ const PIE_COLORS = ["var(--color-chart-1)", "var(--color-chart-2)", "var(--color
 export default function AdminDashboard() {
   const queryClient = useQueryClient();
 
-  const { data: stats } = useQuery({ queryKey: ["admin", "stats"], queryFn: getAdminStats });
-  const { data: allUsers = [] } = useQuery({ queryKey: ["admin", "users"], queryFn: getAllUsersAdmin });
-  const { data: classes = [] } = useQuery({ queryKey: ["admin", "classes"], queryFn: getAllClassesAdmin });
-  const { data: posts = [] } = useQuery({ queryKey: ["admin", "posts"], queryFn: getAllPostsAdmin });
-  const { data: trainerApps = [] } = useQuery({ queryKey: ["admin", "trainerApps"], queryFn: getTrainerApplicationsAdmin });
-  const { data: bookings = [] } = useQuery({ queryKey: ["admin", "bookings"], queryFn: getTransactionsAdmin });
+  const { data: stats, isLoading: isStats } = useQuery({ queryKey: ["admin", "stats"], queryFn: getAdminStats });
+  const { data: allUsers = [], isLoading: isUsers } = useQuery({ queryKey: ["admin", "users"], queryFn: getAllUsersAdmin });
+  const { data: classes = [], isLoading: isClasses } = useQuery({ queryKey: ["admin", "classes"], queryFn: getAllClassesAdmin });
+  const { data: posts = [], isLoading: isPosts } = useQuery({ queryKey: ["admin", "posts"], queryFn: getAllPostsAdmin });
+  const { data: trainerApps = [], isLoading: isApps } = useQuery({ queryKey: ["admin", "trainerApps"], queryFn: getTrainerApplicationsAdmin });
+  const { data: bookings = [], isLoading: isBookings } = useQuery({ queryKey: ["admin", "bookings"], queryFn: getTransactionsAdmin });
+
+  const isLoading = isStats || isUsers || isClasses || isPosts || isApps || isBookings;
 
   const [showAdd, setShowAdd] = useState(false);
   const [form, setForm] = useState({ title: "", category: "Yoga", price: 20, duration: 60, difficulty: "Beginner", schedule: "", image: "", description: "" });
@@ -103,6 +106,8 @@ export default function AdminDashboard() {
   });
 
   const revenue = stats?.totalRevenue || 0;
+
+  if (isLoading) return <Spinner className="mt-20" />;
 
   return (
     <div className="space-y-8">

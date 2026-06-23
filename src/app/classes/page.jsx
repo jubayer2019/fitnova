@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { Input, Select } from "../../components/ui/Input.jsx";
 import ClassCard from "../../components/cards/ClassCard.jsx";
 import Badge from "../../components/ui/Badge.jsx";
+import Spinner from "../../components/ui/Spinner.jsx";
 import { CATEGORIES } from "../../data/mockData.js";
 import { useQuery } from "@tanstack/react-query";
 import { getPublicClasses } from "../../lib/api.js";
@@ -88,7 +89,9 @@ export default function AllClasses() {
       </div>
 
       {/* Grid */}
-      {pageItems.length === 0 ? (
+      {isLoading ? (
+        <Spinner className="mt-16" />
+      ) : pageItems.length === 0 ? (
         <div className="mt-16 rounded-2xl border border-dashed border-border p-16 text-center text-muted-foreground">
           No classes match your filters.
         </div>

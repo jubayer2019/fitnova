@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import Badge from "../../../components/ui/Badge.jsx";
 import Button from "../../../components/ui/Button.jsx";
 import { Textarea } from "../../../components/ui/Input.jsx";
+import Spinner from "../../../components/ui/Spinner.jsx";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getPostById, toggleLike, toggleDislike, addComment } from "../../../lib/api.js";
 import { useAuth } from "../../../context/AuthContext.jsx";
@@ -27,7 +28,7 @@ export default function ForumPostDetails() {
     queryFn: () => getPostById(id)
   });
 
-  if (isLoading) return <div className="p-24 text-center">Loading post...</div>;
+  if (isLoading) return <Spinner className="p-24" size="h-10 w-10" />;
 
   const post = data?.post;
   

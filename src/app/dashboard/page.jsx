@@ -6,6 +6,7 @@ import UserDashboard from "../../components/dashboard/UserDashboard.jsx";
 import TrainerDashboard from "../../components/dashboard/TrainerDashboard.jsx";
 import AdminDashboard from "../../components/dashboard/AdminDashboard.jsx";
 import { useState, useEffect } from "react";
+import Spinner from "../../components/ui/Spinner.jsx";
 
 export default function Dashboard() {
   const { user, isPending } = useAuth();
@@ -20,7 +21,7 @@ export default function Dashboard() {
     }
   }, [mounted, isPending, user, router]);
 
-  if (!mounted || isPending || !user) return <div className="flex h-64 items-center justify-center">Loading your dashboard...</div>;
+  if (!mounted || isPending || !user) return <Spinner className="h-[60vh]" size="h-10 w-10" />;
 
   const View = user.role === "admin" ? AdminDashboard : user.role === "trainer" ? TrainerDashboard : UserDashboard;
   return (
