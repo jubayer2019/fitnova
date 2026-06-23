@@ -45,8 +45,8 @@ export default function ForumPostDetails() {
 
   const author = post.authorId || {};
   const postComments = data?.comments || [];
-  const reactedWithLike = user ? post.likes?.includes(user?.id || user?._id) : false;
-  const reactedWithDislike = user ? post.dislikes?.includes(user?.id || user?._id) : false;
+  const reactedWithLike = user ? post.likedBy?.includes(user?.id || user?._id) : false;
+  const reactedWithDislike = user ? post.dislikedBy?.includes(user?.id || user?._id) : false;
 
   const handleReact = async (kind) => {
     if (!user) return toast.error("Please log in to react.");
@@ -64,7 +64,7 @@ export default function ForumPostDetails() {
     if (!user) return toast.error("Please log in to comment.");
     if (!text.trim()) return;
     try {
-      await addComment({ postId: post._id || post.id, text: text.trim() });
+      await addComment({ postId: post._id || post.id, body: text.trim() });
       setText("");
       toast.success("Comment posted.");
       queryClient.invalidateQueries(['post', id]);

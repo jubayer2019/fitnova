@@ -164,7 +164,7 @@ export const getTrainerApplicationsAdmin = async () => {
 };
 
 export const updateUserRoleAdmin = async (id, role) => {
-  const res = await api.patch(`/admin/users/${id}/make-admin`, { role });
+  const res = await api.patch(`/admin/users/${id}/role`, { role });
   return res.data;
 };
 
