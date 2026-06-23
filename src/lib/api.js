@@ -31,7 +31,7 @@ export const getPublicClasses = async (params) => {
 
 export const getClassById = async (id) => {
   const res = await api.get(`/classes/${id}`);
-  return res.data;
+  return res.data.data;
 };
 
 export const createClass = async (data) => {
@@ -40,7 +40,7 @@ export const createClass = async (data) => {
 };
 
 export const getMyClasses = async () => {
-  const res = await api.get(`/classes/trainer/my?t=${Date.now()}`);
+  const res = await api.get(`/trainer/my-classes?t=${Date.now()}`);
   return res.data.data;
 };
 
@@ -60,8 +60,11 @@ export const getPosts = async (params) => {
 };
 
 export const getPostById = async (id) => {
-  const res = await api.get(`/posts/${id}`);
-  return res.data;
+  const [postRes, commentsRes] = await Promise.all([
+    api.get(`/posts/${id}`),
+    api.get(`/posts/${id}/comments`)
+  ]);
+  return { post: postRes.data.data, comments: commentsRes.data.data };
 };
 
 export const createPost = async (data) => {
@@ -70,7 +73,7 @@ export const createPost = async (data) => {
 };
 
 export const getMyPosts = async () => {
-  const res = await api.get(`/posts/my?t=${Date.now()}`);
+  const res = await api.get(`/trainer/my-posts?t=${Date.now()}`);
   return res.data.data;
 };
 
@@ -90,7 +93,7 @@ export const toggleDislike = async (id) => {
 };
 
 export const addComment = async (data) => {
-  const res = await api.post("/posts/comments", data);
+  const res = await api.post(`/posts/${data.postId}/comments`, data);
   return res.data;
 };
 
@@ -115,17 +118,17 @@ export const getMyBookings = async () => {
 };
 
 export const getMyTrainerApplication = async () => {
-  const res = await api.get(`/trainer/my?t=${Date.now()}`);
+  const res = await api.get(`/trainer-applications/my-status?t=${Date.now()}`);
   return res.data.data;
 };
 
 export const applyForTrainer = async (data) => {
-  const res = await api.post("/trainer/apply", data);
+  const res = await api.post("/trainer-applications", data);
   return res.data;
 };
 
 export const getTrainerBookings = async () => {
-  const res = await api.get(`/bookings/trainer/my?t=${Date.now()}`);
+  const res = await api.get(`/trainer/my-bookings?t=${Date.now()}`);
   return res.data.data;
 };
 
