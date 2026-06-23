@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useState } from "react";
-import { Dumbbell, Menu, X, Sun, Moon, ChevronDown, LogOut, LayoutDashboard, User as UserIcon } from "lucide-react";
+import { Menu, X, Sun, Moon, ChevronDown, LogOut, LayoutDashboard, User as UserIcon } from "lucide-react";
 import Button from "../ui/Button.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useTheme } from "../../context/ThemeContext.jsx";
@@ -29,7 +29,7 @@ export default function Navbar() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl gradient-brand text-white shadow-md shadow-primary/30">
-            <Dumbbell className="h-5 w-5" />
+            <img src="/favicon.ico" alt="FitNova Logo" className="h-5 w-5 object-contain" />
           </div>
           <span className="text-lg font-bold tracking-tight">
             Fit<span className="gradient-text">Nova</span>
