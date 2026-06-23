@@ -272,16 +272,10 @@ export default function AdminDashboard() {
                   <td className="px-5 py-3"><Badge tone={u.role === "admin" ? "brand" : u.role === "trainer" ? "success" : "default"}>{u.role}</Badge></td>
                   <td className="px-5 py-3"><Badge tone={u.status === "active" || !u.status ? "success" : "danger"}>{u.status || "active"}</Badge></td>
                   <td className="px-5 py-3 text-right">
-                    <div className="inline-flex items-center gap-3">
-                      <select 
-                        value={u.role} 
-                        onChange={(e) => mutRole.mutate({ id: u._id || u.id, role: e.target.value })}
-                        className="h-8 rounded-md border border-border bg-transparent px-2 text-xs"
-                      >
-                        <option value="user">User</option>
-                        <option value="trainer">Trainer</option>
-                        <option value="admin">Admin</option>
-                      </select>
+                    <div className="inline-flex items-center gap-1">
+                      {u.role !== 'trainer' && <button onClick={() => mutRole.mutate({ id: u._id || u.id, role: 'trainer' })} className="rounded-md p-2 text-success hover:bg-muted" title="Make Trainer"><Dumbbell className="h-4 w-4" /></button>}
+                      {u.role !== 'admin' && <button onClick={() => mutRole.mutate({ id: u._id || u.id, role: 'admin' })} className="rounded-md p-2 text-primary hover:bg-muted" title="Make Admin"><ShieldCheck className="h-4 w-4" /></button>}
+                      {u.role !== 'user' && <button onClick={() => mutRole.mutate({ id: u._id || u.id, role: 'user' })} className="rounded-md p-2 text-muted-foreground hover:bg-muted" title="Make User"><Users className="h-4 w-4" /></button>}
                       <button onClick={() => mutBlock.mutate({ id: u._id || u.id, status: u.status || 'active' })} className={`rounded-md p-2 ${u.status === 'blocked' ? 'text-success' : 'text-amber-500'} hover:bg-muted`} title={u.status === 'blocked' ? "Unblock" : "Block"}>
                         <Ban className="h-4 w-4" />
                       </button>

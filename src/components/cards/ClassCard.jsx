@@ -37,10 +37,10 @@ export default function ClassCard({ cls, isFavorite, onFavorite }) {
 
       <div className="flex flex-1 flex-col p-5">
         <div className="flex items-center gap-3">
-          <img src={trainer?.image} alt="" className="h-8 w-8 rounded-full object-cover" />
+          <img src={trainer?.image || `https://i.pravatar.cc/150?u=${cls.trainerName || 'trainer'}`} alt="" className="h-8 w-8 rounded-full object-cover" />
           <div>
-            <p className="text-xs font-medium">{trainer?.name}</p>
-            <p className="text-[11px] text-muted-foreground">{trainer?.specialty}</p>
+            <p className="text-xs font-medium">{trainer?.name || cls.trainerName}</p>
+            <p className="text-[11px] text-muted-foreground">{trainer?.specialty || "Fitness Trainer"}</p>
           </div>
         </div>
 

@@ -103,11 +103,11 @@ export default function ClassDetails() {
           <div className="mt-8 rounded-2xl border border-border bg-card p-6">
             <h2 className="text-lg font-semibold">Your coach</h2>
             <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <img src={trainer?.image} className="h-16 w-16 rounded-2xl object-cover" alt="" />
+              <img src={trainer?.image || `https://i.pravatar.cc/150?u=${cls.trainerName || 'trainer'}`} className="h-16 w-16 rounded-2xl object-cover" alt="" />
               <div>
-                <p className="text-base font-semibold">{trainer?.name}</p>
-                <p className="text-xs uppercase tracking-wider text-primary">{trainer?.specialty}</p>
-                <p className="mt-2 max-w-xl text-sm text-muted-foreground">{trainer?.bio}</p>
+                <p className="text-base font-semibold">{trainer?.name || cls.trainerName || "Fitness Trainer"}</p>
+                <p className="text-xs uppercase tracking-wider text-primary">{trainer?.specialty || "Expert Coach"}</p>
+                <p className="mt-2 max-w-xl text-sm text-muted-foreground">{trainer?.bio || "Passionate about helping you achieve your fitness goals and live a healthier life."}</p>
               </div>
             </div>
           </div>

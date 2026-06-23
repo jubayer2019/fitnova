@@ -133,10 +133,10 @@ export default function ForumPostDetails() {
               return (
                 <div key={c.id} className="rounded-2xl border border-border bg-card p-4">
                   <div className="flex items-start gap-3">
-                    <img src={u?.image} alt="" className="h-9 w-9 rounded-full object-cover" />
+                    <img src={c.userImage || u?.image || `https://i.pravatar.cc/150?u=${c.userEmail || c.userName}`} alt="" className="h-9 w-9 rounded-full object-cover" />
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
-                        <p className="text-sm font-medium">{u?.name} <span className="ml-2 text-xs text-muted-foreground">{c.createdAt}</span></p>
+                        <p className="text-sm font-medium">{c.userName || u?.name} <span className="ml-2 text-xs text-muted-foreground">{new Date(c.createdAt).toLocaleDateString()}</span></p>
                         {isMine && (
                           <div className="flex gap-1">
                             <button className="rounded-md p-1.5 text-muted-foreground hover:bg-muted" onClick={() => { setEditId(c._id || c.id); setEditText(c.body); }}>
