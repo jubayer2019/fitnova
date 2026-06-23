@@ -61,34 +61,42 @@ export default function AdminDashboard() {
     mutCreateClass.mutate({ ...form, price: Number(form.price), duration: Number(form.duration), image: form.image || "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=900&q=70" });
   };
 
+  const handleError = (err) => toast.error(err.response?.data?.message || err.message || "Action failed");
+
   const mutRole = useMutation({
     mutationFn: ({ id, role }) => updateUserRoleAdmin(id, role),
-    onSuccess: () => { toast.success("Role updated"); queryClient.invalidateQueries({ queryKey: ["admin", "users"] }); }
+    onSuccess: () => { toast.success("Role updated"); queryClient.invalidateQueries({ queryKey: ["admin", "users"] }); },
+    onError: handleError
   });
 
   const mutBlock = useMutation({
     mutationFn: ({ id, status }) => toggleBlockUserAdmin(id, status),
-    onSuccess: () => { toast.success("Status updated"); queryClient.invalidateQueries({ queryKey: ["admin", "users"] }); }
+    onSuccess: () => { toast.success("Status updated"); queryClient.invalidateQueries({ queryKey: ["admin", "users"] }); },
+    onError: handleError
   });
 
   const mutApproveClass = useMutation({
     mutationFn: approveClassAdmin,
-    onSuccess: () => { toast.success("Class approved"); queryClient.invalidateQueries({ queryKey: ["admin", "classes"] }); }
+    onSuccess: () => { toast.success("Class approved"); queryClient.invalidateQueries({ queryKey: ["admin", "classes"] }); },
+    onError: handleError
   });
 
   const mutRejectClass = useMutation({
     mutationFn: rejectClassAdmin,
-    onSuccess: () => { toast("Class rejected"); queryClient.invalidateQueries({ queryKey: ["admin", "classes"] }); }
+    onSuccess: () => { toast("Class rejected"); queryClient.invalidateQueries({ queryKey: ["admin", "classes"] }); },
+    onError: handleError
   });
 
   const mutDeleteClass = useMutation({
     mutationFn: deleteClassAdmin,
-    onSuccess: () => { toast.success("Class deleted"); queryClient.invalidateQueries({ queryKey: ["admin", "classes"] }); }
+    onSuccess: () => { toast.success("Class deleted"); queryClient.invalidateQueries({ queryKey: ["admin", "classes"] }); },
+    onError: handleError
   });
 
   const mutDeletePost = useMutation({
     mutationFn: deletePostAdmin,
-    onSuccess: () => { toast.success("Post deleted"); queryClient.invalidateQueries({ queryKey: ["admin", "posts"] }); }
+    onSuccess: () => { toast.success("Post deleted"); queryClient.invalidateQueries({ queryKey: ["admin", "posts"] }); },
+    onError: handleError
   });
 
   const mutApproveTrainer = useMutation({
@@ -97,12 +105,14 @@ export default function AdminDashboard() {
       toast.success("Trainer approved"); 
       queryClient.invalidateQueries({ queryKey: ["admin", "trainerApps"] });
       queryClient.invalidateQueries({ queryKey: ["admin", "users"] }); 
-    }
+    },
+    onError: handleError
   });
 
   const mutRejectTrainer = useMutation({
     mutationFn: rejectTrainerAppAdmin,
-    onSuccess: () => { toast("Trainer rejected"); queryClient.invalidateQueries({ queryKey: ["admin", "trainerApps"] }); }
+    onSuccess: () => { toast("Trainer rejected"); queryClient.invalidateQueries({ queryKey: ["admin", "trainerApps"] }); },
+    onError: handleError
   });
 
   const revenue = stats?.totalRevenue || 0;
@@ -223,8 +233,8 @@ export default function AdminDashboard() {
                 <tr><td colSpan={4} className="px-5 py-10 text-center text-muted-foreground">No classes found.</td></tr>
               ) : classes.map((c) => (
                 <tr key={c._id} className="border-t border-border">
-                  <td className="px-5 py-3"><p className="font-medium">{c.title}</p><p className="text-xs text-muted-foreground">{fmtMoney(c.price)} · {c.bookingsCount || 0} booked</p></td>
-                  <td className="px-5 py-3 text-muted-foreground">{c.trainerId?.name || "—"}</td>
+                  <td className="px-5 py-3"><p className="font-medium">{c.className || c.title || "Unknown"}</p><p className="text-xs text-muted-foreground">{fmtMoney(c.price)} · {c.bookingCount || c.bookingsCount || 0} booked</p></td>
+                  <td className="px-5 py-3 text-muted-foreground">{c.trainerName || c.trainerId?.name || "—"}</td>
                   <td className="px-5 py-3"><Badge tone={c.status === "approved" ? "success" : c.status === "rejected" ? "danger" : "warning"}>{c.status}</Badge></td>
                   <td className="px-5 py-3 text-right">
                     <div className="inline-flex gap-1">
@@ -262,11 +272,19 @@ export default function AdminDashboard() {
                   <td className="px-5 py-3"><Badge tone={u.role === "admin" ? "brand" : u.role === "trainer" ? "success" : "default"}>{u.role}</Badge></td>
                   <td className="px-5 py-3"><Badge tone={u.status === "active" || !u.status ? "success" : "danger"}>{u.status || "active"}</Badge></td>
                   <td className="px-5 py-3 text-right">
-                    <div className="inline-flex gap-1">
-                      <button onClick={() => mutBlock.mutate({ id: u._id || u.id, status: u.status || 'active' })} className="rounded-md p-2 text-amber-500 hover:bg-muted" title="Toggle Block"><Ban className="h-4 w-4" /></button>
-                      {u.role !== 'trainer' && <button onClick={() => mutRole.mutate({ id: u._id || u.id, role: 'trainer' })} className="rounded-md p-2 text-success hover:bg-muted" title="Make Trainer"><Dumbbell className="h-4 w-4" /></button>}
-                      {u.role !== 'admin' && <button onClick={() => mutRole.mutate({ id: u._id || u.id, role: 'admin' })} className="rounded-md p-2 text-primary hover:bg-muted" title="Make Admin"><ShieldCheck className="h-4 w-4" /></button>}
-                      {u.role !== 'user' && <button onClick={() => mutRole.mutate({ id: u._id || u.id, role: 'user' })} className="rounded-md p-2 text-muted-foreground hover:bg-muted" title="Make User"><Users className="h-4 w-4" /></button>}
+                    <div className="inline-flex items-center gap-3">
+                      <select 
+                        value={u.role} 
+                        onChange={(e) => mutRole.mutate({ id: u._id || u.id, role: e.target.value })}
+                        className="h-8 rounded-md border border-border bg-transparent px-2 text-xs"
+                      >
+                        <option value="user">User</option>
+                        <option value="trainer">Trainer</option>
+                        <option value="admin">Admin</option>
+                      </select>
+                      <button onClick={() => mutBlock.mutate({ id: u._id || u.id, status: u.status || 'active' })} className={`rounded-md p-2 ${u.status === 'blocked' ? 'text-success' : 'text-amber-500'} hover:bg-muted`} title={u.status === 'blocked' ? "Unblock" : "Block"}>
+                        <Ban className="h-4 w-4" />
+                      </button>
                     </div>
                   </td>
                 </tr>

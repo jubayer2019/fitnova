@@ -176,12 +176,12 @@ export const toggleBlockUserAdmin = async (id, currentStatus) => {
 };
 
 export const approveClassAdmin = async (id) => {
-  const res = await api.patch(`/admin/approve-class/${id}`);
+  const res = await api.patch(`/admin/classes/${id}/approve`);
   return res.data;
 };
 
 export const rejectClassAdmin = async (id) => {
-  const res = await api.patch(`/admin/reject-class/${id}`);
+  const res = await api.patch(`/admin/classes/${id}/reject`);
   return res.data;
 };
 
