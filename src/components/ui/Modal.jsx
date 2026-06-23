@@ -24,15 +24,15 @@ export default function Modal({ open, onClose, title, children, maxWidth = "max-
             exit={{ opacity: 0, y: 20, scale: 0.96 }}
             transition={{ duration: 0.2 }}
             onClick={(e) => e.stopPropagation()}
-            className={`relative w-full ${maxWidth} rounded-2xl border border-border bg-card shadow-2xl`}
+            className={`relative flex w-full max-h-[90vh] flex-col ${maxWidth} rounded-2xl border border-border bg-card shadow-2xl`}
           >
-            <div className="flex items-center justify-between border-b border-border px-6 py-4">
+            <div className="flex shrink-0 items-center justify-between border-b border-border px-6 py-4">
               <h3 className="text-lg font-semibold">{title}</h3>
               <button onClick={onClose} className="rounded-md p-1 text-muted-foreground hover:bg-muted hover:text-foreground">
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <div className="p-6">{children}</div>
+            <div className="overflow-y-auto p-6">{children}</div>
           </motion.div>
         </motion.div>
       )}

@@ -37,6 +37,9 @@ export default function TrainerDashboard() {
       queryClient.invalidateQueries({ queryKey: ["trainer", "classes"] });
       setShowAdd(false);
       setForm({ title: "", category: "Yoga", price: 20, duration: 60, difficulty: "Beginner", schedule: "", image: "", description: "" });
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.message || err.message || "Failed to submit class");
     }
   });
 
@@ -50,7 +53,16 @@ export default function TrainerDashboard() {
 
   const onAdd = (e) => {
     e.preventDefault();
-    mutAddClass.mutate({ ...form, price: Number(form.price), duration: Number(form.duration), image: form.image || "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=900&q=70" });
+    mutAddClass.mutate({ 
+      className: form.title,
+      difficultyLevel: form.difficulty,
+      category: form.category,
+      schedule: form.schedule,
+      description: form.description,
+      price: Number(form.price), 
+      duration: Number(form.duration), 
+      image: form.image || "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=900&q=70" 
+    });
   };
 
   const [postForm, setPostForm] = useState({ title: "", category: "Strength", excerpt: "", body: "", image: "" });
