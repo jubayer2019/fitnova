@@ -18,10 +18,10 @@ export default function PostCard({ post, author }) {
 
         <div className="mt-auto flex items-center justify-between pt-5">
           <div className="flex items-center gap-2">
-            <img src={author?.image} alt="" className="h-7 w-7 rounded-full object-cover" />
+            <img src={post.authorImage || "https://github.com/shadcn.png"} alt="" className="h-7 w-7 rounded-full object-cover" />
             <div>
-              <p className="text-xs font-medium">{author?.name || "Member"}</p>
-              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{author?.role}</p>
+              <p className="text-xs font-medium">{post.authorName || "Member"}</p>
+              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{post.authorRole}</p>
             </div>
           </div>
           <div className="flex items-center gap-3 text-xs text-muted-foreground">

@@ -83,10 +83,10 @@ export default function ForumPostDetails() {
         <Badge tone="brand">{post.category}</Badge>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">{post.title}</h1>
         <div className="mt-4 flex items-center gap-3">
-          <img src={author?.image} alt="" className="h-9 w-9 rounded-full object-cover" />
+          <img src={post.authorImage || "https://github.com/shadcn.png"} alt="" className="h-9 w-9 rounded-full object-cover" />
           <div>
-            <p className="text-sm font-medium">{author?.name}</p>
-            <p className="text-xs uppercase tracking-wider text-muted-foreground">{author?.role} · {post.createdAt}</p>
+            <p className="text-sm font-medium">{post.authorName || "Member"}</p>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">{post.authorRole} · {post.createdAt}</p>
           </div>
         </div>
 
