@@ -272,11 +272,36 @@ export default function AdminDashboard() {
                   <td className="px-5 py-3"><Badge tone={u.role === "admin" ? "brand" : u.role === "trainer" ? "success" : "default"}>{u.role}</Badge></td>
                   <td className="px-5 py-3"><Badge tone={u.status === "active" || !u.status ? "success" : "danger"}>{u.status || "active"}</Badge></td>
                   <td className="px-5 py-3 text-right">
-                    <div className="inline-flex items-center gap-1">
-                      {u.role !== 'trainer' && <button onClick={() => mutRole.mutate({ id: u._id || u.id, role: 'trainer' })} className="rounded-md p-2 text-success hover:bg-muted" title="Make Trainer"><Dumbbell className="h-4 w-4" /></button>}
-                      {u.role !== 'admin' && <button onClick={() => mutRole.mutate({ id: u._id || u.id, role: 'admin' })} className="rounded-md p-2 text-primary hover:bg-muted" title="Make Admin"><ShieldCheck className="h-4 w-4" /></button>}
-                      {u.role !== 'user' && <button onClick={() => mutRole.mutate({ id: u._id || u.id, role: 'user' })} className="rounded-md p-2 text-muted-foreground hover:bg-muted" title="Make User"><Users className="h-4 w-4" /></button>}
-                      <button onClick={() => mutBlock.mutate({ id: u._id || u.id, status: u.status || 'active' })} className={`rounded-md p-2 ${u.status === 'blocked' ? 'text-success' : 'text-amber-500'} hover:bg-muted`} title={u.status === 'blocked' ? "Unblock" : "Block"}>
+                    <div className="flex items-center gap-1 justify-end w-32">
+                      <button 
+                        onClick={() => mutRole.mutate({ id: u._id || u.id, role: 'trainer' })} 
+                        disabled={u.role === 'trainer'}
+                        className={`rounded-md p-2 transition-colors ${u.role === 'trainer' ? 'text-success/40 cursor-not-allowed bg-success/5' : 'text-success hover:bg-muted'}`} 
+                        title="Make Trainer"
+                      >
+                        <Dumbbell className="h-4 w-4" />
+                      </button>
+                      <button 
+                        onClick={() => mutRole.mutate({ id: u._id || u.id, role: 'admin' })} 
+                        disabled={u.role === 'admin'}
+                        className={`rounded-md p-2 transition-colors ${u.role === 'admin' ? 'text-primary/40 cursor-not-allowed bg-primary/5' : 'text-primary hover:bg-muted'}`} 
+                        title="Make Admin"
+                      >
+                        <ShieldCheck className="h-4 w-4" />
+                      </button>
+                      <button 
+                        onClick={() => mutRole.mutate({ id: u._id || u.id, role: 'user' })} 
+                        disabled={u.role === 'user' || !u.role}
+                        className={`rounded-md p-2 transition-colors ${u.role === 'user' || !u.role ? 'text-muted-foreground/40 cursor-not-allowed bg-muted' : 'text-muted-foreground hover:bg-muted'}`} 
+                        title="Make User"
+                      >
+                        <Users className="h-4 w-4" />
+                      </button>
+                      <button 
+                        onClick={() => mutBlock.mutate({ id: u._id || u.id, status: u.status || 'active' })} 
+                        className={`rounded-md p-2 transition-colors ${u.status === 'blocked' ? 'text-success hover:bg-success/10' : 'text-amber-500 hover:bg-amber-500/10'}`} 
+                        title={u.status === 'blocked' ? "Unblock" : "Block"}
+                      >
                         <Ban className="h-4 w-4" />
                       </button>
                     </div>
