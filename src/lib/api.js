@@ -1,8 +1,10 @@
 import axios from "axios";
 
-const baseURL = process.env.NEXT_PUBLIC_API_URL 
-    ? `${process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, "")}/api`
-    : "http://localhost:5000/api";
+const baseURL = typeof window !== "undefined"
+  ? "/api"
+  : (process.env.NEXT_PUBLIC_API_URL 
+      ? `${process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, "")}/api`
+      : "http://localhost:5000/api");
 
 export const api = axios.create({
   baseURL,
@@ -39,7 +41,7 @@ export const createClass = async (data) => {
 
 export const getMyClasses = async () => {
   const res = await api.get(`/classes/trainer/my?t=${Date.now()}`);
-  return res.data;
+  return res.data.data;
 };
 
 export const deleteMyClass = async (id) => {
@@ -69,7 +71,7 @@ export const createPost = async (data) => {
 
 export const getMyPosts = async () => {
   const res = await api.get(`/posts/my?t=${Date.now()}`);
-  return res.data;
+  return res.data.data;
 };
 
 export const deleteMyPost = async (id) => {
@@ -94,7 +96,7 @@ export const addComment = async (data) => {
 
 export const getMyComments = async () => {
   const res = await api.get(`/posts/comments/my?t=${Date.now()}`);
-  return res.data;
+  return res.data.data;
 };
 
 export const toggleFavorite = async (classId) => {
@@ -103,18 +105,18 @@ export const toggleFavorite = async (classId) => {
 };
 
 export const getMyFavorites = async () => {
-  const res = await api.get("/favorites/my");
-  return res.data;
+  const res = await api.get("/favorites/my-favorites");
+  return res.data.data;
 };
 
 export const getMyBookings = async () => {
-  const res = await api.get(`/bookings/my?t=${Date.now()}`);
-  return res.data;
+  const res = await api.get(`/bookings/my-bookings?t=${Date.now()}`);
+  return res.data.data;
 };
 
 export const getMyTrainerApplication = async () => {
   const res = await api.get(`/trainer/my?t=${Date.now()}`);
-  return res.data;
+  return res.data.data;
 };
 
 export const applyForTrainer = async (data) => {
@@ -124,49 +126,49 @@ export const applyForTrainer = async (data) => {
 
 export const getTrainerBookings = async () => {
   const res = await api.get(`/bookings/trainer/my?t=${Date.now()}`);
-  return res.data;
+  return res.data.data;
 };
 
 // --- Admin API ---
 export const getAdminStats = async () => {
-  const res = await api.get(`/admin/stats?t=${Date.now()}`);
-  return res.data;
+  const res = await api.get(`/admin/overview?t=${Date.now()}`);
+  return res.data.data;
 };
 
 export const getAllUsersAdmin = async () => {
   const res = await api.get(`/admin/users?t=${Date.now()}`);
-  return res.data;
+  return res.data.data;
 };
 
 export const getAllClassesAdmin = async () => {
   const res = await api.get(`/admin/classes?t=${Date.now()}`);
-  return res.data;
+  return res.data.data;
 };
 
 export const getAllPostsAdmin = async () => {
-  const res = await api.get(`/admin/posts?t=${Date.now()}`);
-  return res.data;
+  const res = await api.get(`/admin/forum-posts?t=${Date.now()}`);
+  return res.data.data;
 };
 
 export const getTransactionsAdmin = async () => {
   const res = await api.get(`/admin/transactions?t=${Date.now()}`);
-  return res.data;
+  return res.data.data;
 };
 
 export const getTrainerApplicationsAdmin = async () => {
-  const res = await api.get(`/trainer/applications?t=${Date.now()}`);
-  return res.data;
+  const res = await api.get(`/admin/trainer-applications?t=${Date.now()}`);
+  return res.data.data;
 };
 
 export const updateUserRoleAdmin = async (id, role) => {
-  const res = await api.patch(`/admin/update-role/${id}`, { role });
+  const res = await api.patch(`/admin/users/${id}/make-admin`, { role });
   return res.data;
 };
 
 export const toggleBlockUserAdmin = async (id, currentStatus) => {
   const endpoint =
-    currentStatus === "active" ? `/admin/block-user/${id}` : `/admin/unblock-user/${id}`;
-  const res = await api.post(endpoint);
+    currentStatus === "active" ? `/admin/users/${id}/block` : `/admin/users/${id}/unblock`;
+  const res = await api.patch(endpoint);
   return res.data;
 };
 
@@ -186,18 +188,16 @@ export const deleteClassAdmin = async (id) => {
 };
 
 export const deletePostAdmin = async (id) => {
-  // We can just use the regular delete post endpoint or add one
-  // ForumRoutes doesn't seem to have a delete post endpoint yet. I will add one if needed, or see if it's there.
-  const res = await api.delete(`/posts/${id}`);
+  const res = await api.delete(`/admin/forum-posts/${id}`);
   return res.data;
 };
 
 export const approveTrainerAppAdmin = async (id) => {
-  const res = await api.patch(`/trainer/approve/${id}`);
+  const res = await api.patch(`/admin/trainer-applications/${id}/approve`);
   return res.data;
 };
 
 export const rejectTrainerAppAdmin = async (id) => {
-  const res = await api.patch(`/trainer/reject/${id}`);
+  const res = await api.patch(`/admin/trainer-applications/${id}/reject`);
   return res.data;
 };

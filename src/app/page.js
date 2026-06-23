@@ -122,7 +122,7 @@ export default function Home() {
                 <Badge tone="success"><Activity className="mr-1 h-3 w-3" /> Live</Badge>
               </div>
               <div className="h-32">
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                   <AreaChart data={monthlyAnalytics}>
                     <defs>
                       <linearGradient id="hg" x1="0" y1="0" x2="0" y2="1">
@@ -244,7 +244,7 @@ export default function Home() {
               <Badge tone="success">↑ 21% MoM</Badge>
             </div>
             <div className="mt-4 h-64">
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                 <BarChart data={monthlyAnalytics}>
                   <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} />
                   <XAxis dataKey="month" stroke="var(--muted-foreground)" fontSize={12} />

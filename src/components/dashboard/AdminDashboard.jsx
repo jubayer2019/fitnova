@@ -102,7 +102,7 @@ export default function AdminDashboard() {
     onSuccess: () => { toast("Trainer rejected"); queryClient.invalidateQueries({ queryKey: ["admin", "trainerApps"] }); }
   });
 
-  const revenue = stats?.revenue || 0;
+  const revenue = stats?.totalRevenue || 0;
 
   return (
     <div className="space-y-8">
@@ -133,7 +133,7 @@ export default function AdminDashboard() {
             <Badge tone="success">+21% MoM</Badge>
           </div>
           <div className="h-72">
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="100%" height="100%" minWidth={0}>
               <AreaChart data={monthlyAnalytics}>
                 <defs>
                   <linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="var(--color-primary)" stopOpacity={0.5} /><stop offset="100%" stopColor="var(--color-primary)" stopOpacity={0} /></linearGradient>
@@ -154,7 +154,7 @@ export default function AdminDashboard() {
           <h2 className="text-base font-semibold">Category mix</h2>
           <p className="text-xs text-muted-foreground">Share of bookings by category</p>
           <div className="h-72">
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="100%" height="100%" minWidth={0}>
               <PieChart>
                 <Pie data={categoryShare} dataKey="value" nameKey="name" innerRadius={50} outerRadius={85} paddingAngle={2}>
                   {categoryShare.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
