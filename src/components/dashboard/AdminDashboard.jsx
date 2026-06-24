@@ -53,12 +53,22 @@ export default function AdminDashboard() {
       queryClient.invalidateQueries({ queryKey: ["admin", "classes"] });
       setShowAdd(false);
       setForm({ title: "", category: "Yoga", price: 20, duration: 60, difficulty: "Beginner", schedule: "", image: "", description: "" });
-    }
+    },
+    onError: handleError
   });
 
   const onAdd = (e) => {
     e.preventDefault();
-    mutCreateClass.mutate({ ...form, price: Number(form.price), duration: Number(form.duration), image: form.image || "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=900&q=70" });
+    mutCreateClass.mutate({
+      className: form.title,
+      difficultyLevel: form.difficulty,
+      category: form.category,
+      price: Number(form.price),
+      duration: Number(form.duration),
+      schedule: form.schedule,
+      description: form.description,
+      image: form.image || "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=900&q=70"
+    });
   };
 
   const handleError = (err) => toast.error(err.response?.data?.message || err.message || "Action failed");
