@@ -22,7 +22,6 @@ function LoginForm() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
-
   const [initialCheck, setInitialCheck] = useState(true);
 
   useEffect(() => {

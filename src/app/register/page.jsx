@@ -24,6 +24,9 @@ function RegisterForm() {
 
   const [initialCheck, setInitialCheck] = useState(true);
 
+  const [form, setForm] = useState({ name: "", email: "", image: "", password: "", confirm: "" });
+  const [errors, setErrors] = useState({});
+
   useEffect(() => {
     if (!isPending) setInitialCheck(false);
   }, [isPending]);
@@ -35,9 +38,6 @@ function RegisterForm() {
   }, [user, isPending, router]);
 
   if (initialCheck || user) return <div className="flex min-h-screen items-center justify-center">Loading...</div>;
-
-  const [form, setForm] = useState({ name: "", email: "", image: "", password: "", confirm: "" });
-  const [errors, setErrors] = useState({});
 
   const onChange = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
