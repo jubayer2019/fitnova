@@ -35,8 +35,8 @@ export default function Home() {
 
   const stats = [
     { label: "Active Members", value: "12,480", delta: "+18.2%", icon: Users },
-    { label: "Classes Running", value: "184",    delta: "+6 this wk", icon: Calendar },
-    { label: "Trainer Growth", value: "+34%",    delta: "MoM", icon: TrendingUp },
+    { label: "Classes Running", value: "184", delta: "+6 this wk", icon: Calendar },
+    { label: "Trainer Growth", value: "+34%", delta: "MoM", icon: TrendingUp },
     { label: "Monthly Bookings", value: "9,820", delta: "+12.4%", icon: BarChart3 },
   ];
 
@@ -292,7 +292,7 @@ export default function Home() {
               <p className="mt-3 max-w-xl text-white/85">Join the network of studios using FitNova to launch new classes, fill rosters, and grow recurring revenue.</p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-              <Button asChild variant="primary" size="lg" className="bg-white text-primary hover:bg-white/90">
+              <Button asChild variant="primary" size="lg" className="bg-white text-black hover:bg-white/90">
                 <Link href="/register">Start free trial</Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="border-white/40 text-white hover:bg-white/10">
