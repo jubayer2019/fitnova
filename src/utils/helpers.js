@@ -1,4 +1,7 @@
-export const cn = (...classes) => classes.filter(Boolean).join(" ");
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export const cn = (...classes) => twMerge(clsx(classes));
 
 export const fmtMoney = (n) => `$${Number(n).toFixed(2)}`;
 

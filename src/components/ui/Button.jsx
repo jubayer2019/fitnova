@@ -1,3 +1,4 @@
+import { Slot } from "@radix-ui/react-slot";
 import { cn } from "../../utils/helpers.js";
 
 const variants = {
@@ -17,15 +18,16 @@ const sizes = {
 };
 
 export default function Button({
-  as: Tag = "button",
+  asChild = false,
   variant = "primary",
   size = "md",
   className,
   children,
   ...rest
 }) {
+  const Comp = asChild ? Slot : "button";
   return (
-    <Tag
+    <Comp
       className={cn(
         "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50 disabled:pointer-events-none",
         variants[variant],
@@ -35,6 +37,6 @@ export default function Button({
       {...rest}
     >
       {children}
-    </Tag>
+    </Comp>
   );
 }
