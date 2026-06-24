@@ -18,6 +18,7 @@ const sizes = {
 };
 
 export default function Button({
+  as: Tag = "button",
   asChild = false,
   variant = "primary",
   size = "md",
@@ -25,7 +26,7 @@ export default function Button({
   children,
   ...rest
 }) {
-  const Comp = asChild ? Slot : "button";
+  const Comp = asChild ? Slot : Tag;
   return (
     <Comp
       className={cn(
