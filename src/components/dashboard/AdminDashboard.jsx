@@ -46,6 +46,8 @@ export default function AdminDashboard() {
   const [showAdd, setShowAdd] = useState(false);
   const [form, setForm] = useState({ title: "", category: "Yoga", price: 20, duration: 60, difficulty: "Beginner", schedule: "", image: "", description: "" });
 
+  const handleError = (err) => toast.error(err.response?.data?.message || err.message || "Action failed");
+
   const mutCreateClass = useMutation({
     mutationFn: createClass,
     onSuccess: () => {
@@ -70,8 +72,6 @@ export default function AdminDashboard() {
       image: form.image || "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=900&q=70"
     });
   };
-
-  const handleError = (err) => toast.error(err.response?.data?.message || err.message || "Action failed");
 
   const mutRole = useMutation({
     mutationFn: ({ id, role }) => updateUserRoleAdmin(id, role),
