@@ -128,8 +128,9 @@ export default function ForumPostDetails() {
             <p className="rounded-2xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">Be the first to share your thoughts.</p>
           ) : (
             postComments.map((c) => {
-              const u = c.userId || {};
-              const isMine = user && (user.id === u._id || user._id === u._id);
+              const u = typeof c.userId === 'object' ? c.userId : null;
+              const commentUserId = u ? (u._id || u.id) : c.userId;
+              const isMine = user && (user.id === commentUserId || user._id === commentUserId);
               return (
                 <div key={c.id} className="rounded-2xl border border-border bg-card p-4">
                   <div className="flex items-start gap-3">
