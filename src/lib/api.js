@@ -97,6 +97,16 @@ export const addComment = async (data) => {
   return res.data;
 };
 
+export const editComment = async (commentId, data) => {
+  const res = await api.patch(`/comments/${commentId}`, data);
+  return res.data;
+};
+
+export const deleteComment = async (commentId) => {
+  const res = await api.delete(`/comments/${commentId}`);
+  return res.data;
+};
+
 export const getMyComments = async () => {
   const res = await api.get(`/posts/comments/my?t=${Date.now()}`);
   return res.data.data;

@@ -10,13 +10,12 @@ import Button from "../../../components/ui/Button.jsx";
 import { Textarea } from "../../../components/ui/Input.jsx";
 import Spinner from "../../../components/ui/Spinner.jsx";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getPostById, toggleLike, toggleDislike, addComment } from "../../../lib/api.js";
+import { getPostById, toggleLike, toggleDislike, addComment, editComment, deleteComment } from "../../../lib/api.js";
 import { useAuth } from "../../../context/AuthContext.jsx";
 import { useData } from "../../../context/DataContext.jsx";
 
 export default function ForumPostDetails() {
   const { id } = useParams();
-  const { deleteComment, updateComment } = useData();
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [text, setText] = useState("");
@@ -70,6 +69,27 @@ export default function ForumPostDetails() {
       queryClient.invalidateQueries(['post', id]);
     } catch(err) {
       toast.error("Failed to post comment");
+    }
+  };
+
+  const handleEditComment = async (commentId) => {
+    try {
+      await editComment(commentId, { body: editText.trim() });
+      setEditId(null);
+      toast.success("Updated");
+      queryClient.invalidateQueries(['post', id]);
+    } catch (err) {
+      toast.error("Failed to update comment");
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await deleteComment(commentId);
+      toast.success("Comment deleted");
+      queryClient.invalidateQueries(['post', id]);
+    } catch (err) {
+      toast.error("Failed to delete comment");
     }
   };
 
@@ -143,7 +163,7 @@ export default function ForumPostDetails() {
                             <button className="rounded-md p-1.5 text-muted-foreground hover:bg-muted" onClick={() => { setEditId(c._id || c.id); setEditText(c.body); }}>
                               <Pencil className="h-3.5 w-3.5" />
                             </button>
-                            <button className="rounded-md p-1.5 text-destructive hover:bg-muted" onClick={() => { deleteComment(c._id || c.id); toast.success("Comment deleted"); }}>
+                            <button className="rounded-md p-1.5 text-destructive hover:bg-muted" onClick={() => handleDeleteComment(c._id || c.id)}>
                               <Trash2 className="h-3.5 w-3.5" />
                             </button>
                           </div>
@@ -154,7 +174,7 @@ export default function ForumPostDetails() {
                           <Textarea value={editText} onChange={(e) => setEditText(e.target.value)} />
                           <div className="flex justify-end gap-2">
                             <Button size="sm" variant="ghost" onClick={() => setEditId(null)}>Cancel</Button>
-                            <Button size="sm" variant="primary" onClick={() => { updateComment(c._id || c.id, editText.trim()); setEditId(null); toast.success("Updated"); }}>Save</Button>
+                            <Button size="sm" variant="primary" onClick={() => handleEditComment(c._id || c.id)}>Save</Button>
                           </div>
                         </div>
                       ) : (
