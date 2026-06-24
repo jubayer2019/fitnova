@@ -23,13 +23,19 @@ function LoginForm() {
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
 
+  const [initialCheck, setInitialCheck] = useState(true);
+
+  useEffect(() => {
+    if (!isPending) setInitialCheck(false);
+  }, [isPending]);
+
   useEffect(() => {
     if (user && !isPending) {
       router.push("/dashboard");
     }
   }, [user, isPending, router]);
 
-  if (isPending || user) return <div className="flex min-h-screen items-center justify-center">Loading...</div>;
+  if (initialCheck || user) return <div className="flex min-h-screen items-center justify-center">Loading...</div>;
 
   const onSubmit = async (e) => {
     e.preventDefault();
