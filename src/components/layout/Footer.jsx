@@ -44,9 +44,7 @@ export default function Footer() {
         <div className="grid gap-10 md:grid-cols-4">
           <div>
             <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl gradient-brand text-white">
-                <Dumbbell className="h-5 w-5" />
-              </div>
+
               <span className="text-lg font-bold tracking-tight">
                 Fit<span className="gradient-text">Nova</span>
               </span>
@@ -69,9 +67,9 @@ export default function Footer() {
           <div>
             <h4 className="text-sm font-semibold">Contact</h4>
             <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-              <li className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4" /> 220 Market St, San Francisco, CA</li>
-              <li className="flex items-center gap-2"><Mail className="h-4 w-4" /> hello@fitnova.app</li>
-              <li className="flex items-center gap-2"><Phone className="h-4 w-4" /> +1 (415) 555-0188</li>
+              <li className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4" /> Khondokar Loz, Ambikapur, Faridpur, CA</li>
+              <li className="flex items-center gap-2"><Mail className="h-4 w-4" /> jubayer.prodesigner@gmail.com</li>
+              <li className="flex items-center gap-2"><Phone className="h-4 w-4" /> +880 19 356-15672</li>
             </ul>
           </div>
 
@@ -79,19 +77,15 @@ export default function Footer() {
             <h4 className="text-sm font-semibold">Follow</h4>
             <div className="mt-4 flex gap-2">
               {[
-                { Icon: XIcon, label: "X" },
-                { Icon: InstagramIcon, label: "Instagram" },
-                { Icon: LinkedinIcon, label: "LinkedIn" },
-                { Icon: GithubIcon, label: "GitHub" },
-              ].map(({ Icon, label }) => (
-                <a key={label} href="#" aria-label={label} className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-muted-foreground hover:bg-muted hover:text-foreground">
+                { Icon: FacebookIcon, label: "Facebook", href: "https://web.facebook.com/jubayer.info360" },
+                { Icon: LinkedinIcon, label: "LinkedIn", href: "https://www.linkedin.com/in/pro-jubayer" },
+                { Icon: GithubIcon, label: "GitHub", href: "https://github.com/jubayer2019" },
+              ].map(({ Icon, label, href }) => (
+                <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-muted-foreground hover:bg-muted hover:text-foreground">
                   <Icon className="h-4 w-4" />
                 </a>
               ))}
             </div>
-            <p className="mt-6 text-xs text-muted-foreground">
-              SOC 2 ready. GDPR compliant. PCI-DSS payments.
-            </p>
           </div>
         </div>
 

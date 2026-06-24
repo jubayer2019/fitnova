@@ -111,10 +111,10 @@ export default function AdminDashboard() {
 
   const mutApproveTrainer = useMutation({
     mutationFn: approveTrainerAppAdmin,
-    onSuccess: () => { 
-      toast.success("Trainer approved"); 
+    onSuccess: () => {
+      toast.success("Trainer approved");
       queryClient.invalidateQueries({ queryKey: ["admin", "trainerApps"] });
-      queryClient.invalidateQueries({ queryKey: ["admin", "users"] }); 
+      queryClient.invalidateQueries({ queryKey: ["admin", "users"] });
     },
     onError: handleError
   });
@@ -231,7 +231,6 @@ export default function AdminDashboard() {
       <section className="rounded-2xl border border-border bg-card">
         <header className="flex items-center justify-between border-b border-border p-5">
           <h2 className="text-base font-semibold">Classes</h2>
-          <Button onClick={() => setShowAdd(true)} variant="primary" size="sm"><Plus className="mr-2 h-4 w-4" /> New class</Button>
         </header>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -283,33 +282,33 @@ export default function AdminDashboard() {
                   <td className="px-5 py-3"><Badge tone={u.status === "active" || !u.status ? "success" : "danger"}>{u.status || "active"}</Badge></td>
                   <td className="px-5 py-3 text-right">
                     <div className="flex items-center gap-1 justify-end w-32">
-                      <button 
-                        onClick={() => mutRole.mutate({ id: u._id || u.id, role: 'trainer' })} 
+                      <button
+                        onClick={() => mutRole.mutate({ id: u._id || u.id, role: 'trainer' })}
                         disabled={u.role === 'trainer'}
-                        className={`rounded-md p-2 transition-colors ${u.role === 'trainer' ? 'text-success/40 cursor-not-allowed bg-success/5' : 'text-success hover:bg-muted'}`} 
+                        className={`rounded-md p-2 transition-colors ${u.role === 'trainer' ? 'text-success/40 cursor-not-allowed bg-success/5' : 'text-success hover:bg-muted'}`}
                         title="Make Trainer"
                       >
                         <Dumbbell className="h-4 w-4" />
                       </button>
-                      <button 
-                        onClick={() => mutRole.mutate({ id: u._id || u.id, role: 'admin' })} 
+                      <button
+                        onClick={() => mutRole.mutate({ id: u._id || u.id, role: 'admin' })}
                         disabled={u.role === 'admin'}
-                        className={`rounded-md p-2 transition-colors ${u.role === 'admin' ? 'text-primary/40 cursor-not-allowed bg-primary/5' : 'text-primary hover:bg-muted'}`} 
+                        className={`rounded-md p-2 transition-colors ${u.role === 'admin' ? 'text-primary/40 cursor-not-allowed bg-primary/5' : 'text-primary hover:bg-muted'}`}
                         title="Make Admin"
                       >
                         <ShieldCheck className="h-4 w-4" />
                       </button>
-                      <button 
-                        onClick={() => mutRole.mutate({ id: u._id || u.id, role: 'user' })} 
+                      <button
+                        onClick={() => mutRole.mutate({ id: u._id || u.id, role: 'user' })}
                         disabled={u.role === 'user' || !u.role}
-                        className={`rounded-md p-2 transition-colors ${u.role === 'user' || !u.role ? 'text-muted-foreground/40 cursor-not-allowed bg-muted' : 'text-muted-foreground hover:bg-muted'}`} 
+                        className={`rounded-md p-2 transition-colors ${u.role === 'user' || !u.role ? 'text-muted-foreground/40 cursor-not-allowed bg-muted' : 'text-muted-foreground hover:bg-muted'}`}
                         title="Make User"
                       >
                         <Users className="h-4 w-4" />
                       </button>
-                      <button 
-                        onClick={() => mutBlock.mutate({ id: u._id || u.id, status: u.status || 'active' })} 
-                        className={`rounded-md p-2 transition-colors ${u.status === 'blocked' ? 'text-success hover:bg-success/10' : 'text-amber-500 hover:bg-amber-500/10'}`} 
+                      <button
+                        onClick={() => mutBlock.mutate({ id: u._id || u.id, status: u.status || 'active' })}
+                        className={`rounded-md p-2 transition-colors ${u.status === 'blocked' ? 'text-success hover:bg-success/10' : 'text-amber-500 hover:bg-amber-500/10'}`}
                         title={u.status === 'blocked' ? "Unblock" : "Block"}
                       >
                         <Ban className="h-4 w-4" />
