@@ -45,7 +45,7 @@ export default function ClassDetails() {
   }
 
   const trainer = cls.trainerId || {};
-  const related = (relatedData?.classes || []).filter(c => c._id !== cls._id).slice(0, 3);
+  const related = (relatedData?.data || []).filter(c => c._id !== cls._id).slice(0, 3);
   const fav = user ? Boolean(favorites[user?.id || user?._id]?.includes(cls._id)) : false;
   const booked = user ? isBooked(user?.id || user?._id, cls._id) : false;
 
@@ -70,15 +70,15 @@ export default function ClassDetails() {
       <div className="mt-6 grid gap-10 lg:grid-cols-3 lg:gap-12">
         <div className="lg:col-span-2">
           <div className="relative aspect-[16/9] overflow-hidden rounded-3xl border border-border">
-            <img src={cls.image} alt={cls.title} className="h-full w-full object-cover" />
+            <img src={cls.image} alt={cls.className || cls.title} className="h-full w-full object-cover" />
             <Badge tone="brand" className="absolute left-4 top-4 bg-white/95 text-primary">{cls.category}</Badge>
           </div>
 
-          <h1 className="mt-8 text-3xl font-semibold tracking-tight sm:text-4xl">{cls.title}</h1>
+          <h1 className="mt-8 text-3xl font-semibold tracking-tight sm:text-4xl">{cls.className || cls.title}</h1>
           <div className="mt-3 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
             <span className="flex items-center gap-1"><Clock className="h-4 w-4" /> {cls.duration} min</span>
-            <span className="flex items-center gap-1"><Flame className="h-4 w-4" /> {cls.difficulty}</span>
-            <span className="flex items-center gap-1"><Users2 className="h-4 w-4" /> {cls.bookingsCount || cls.bookings || 0} booked</span>
+            <span className="flex items-center gap-1"><Flame className="h-4 w-4" /> {cls.difficultyLevel || cls.difficulty}</span>
+            <span className="flex items-center gap-1"><Users2 className="h-4 w-4" /> {cls.bookingCount || cls.bookings || 0} booked</span>
             <span className="flex items-center gap-1"><Calendar className="h-4 w-4" /> {cls.schedule}</span>
           </div>
 
@@ -131,9 +131,9 @@ export default function ClassDetails() {
 
             <div className="mt-6 divide-y divide-border text-sm">
               <div className="flex justify-between py-3"><span className="text-muted-foreground">Duration</span><span className="font-medium">{cls.duration} min</span></div>
-              <div className="flex justify-between py-3"><span className="text-muted-foreground">Difficulty</span><span className="font-medium">{cls.difficulty}</span></div>
+              <div className="flex justify-between py-3"><span className="text-muted-foreground">Difficulty</span><span className="font-medium">{cls.difficultyLevel || cls.difficulty}</span></div>
               <div className="flex justify-between py-3"><span className="text-muted-foreground">Schedule</span><span className="font-medium text-right">{cls.schedule}</span></div>
-              <div className="flex justify-between py-3"><span className="text-muted-foreground">Bookings</span><span className="font-medium">{cls.bookingsCount || cls.bookings || 0}</span></div>
+              <div className="flex justify-between py-3"><span className="text-muted-foreground">Bookings</span><span className="font-medium">{cls.bookingCount || cls.bookings || 0}</span></div>
             </div>
           </div>
         </aside>

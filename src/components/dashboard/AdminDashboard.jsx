@@ -60,14 +60,14 @@ export default function AdminDashboard() {
     onError: handleError
   });
 
-  const [postForm, setPostForm] = useState({ title: "", category: "Strength", excerpt: "", body: "", image: "" });
+  const [postForm, setPostForm] = useState({ title: "", category: "Strength", description: "", image: "" });
 
   const mutAddPost = useMutation({
     mutationFn: createPost,
     onSuccess: () => {
       toast.success("Post published.");
       queryClient.invalidateQueries({ queryKey: ["admin", "posts"] });
-      setPostForm({ title: "", category: "Strength", excerpt: "", body: "", image: "" });
+      setPostForm({ title: "", category: "Strength", description: "", image: "" });
     },
     onError: handleError
   });
@@ -359,8 +359,7 @@ export default function AdminDashboard() {
                 onChange={(url) => setPostForm({ ...postForm, image: url })}
               />
             </div>
-            <div><Label>Excerpt</Label><Input value={postForm.excerpt} onChange={(e) => setPostForm({ ...postForm, excerpt: e.target.value })} required /></div>
-            <div><Label>Body</Label><Textarea value={postForm.body} onChange={(e) => setPostForm({ ...postForm, body: e.target.value })} required /></div>
+            <div><Label>Body</Label><Textarea value={postForm.description} onChange={(e) => setPostForm({ ...postForm, description: e.target.value })} required /></div>
             <Button type="submit" variant="primary">Publish post</Button>
           </div>
         </form>

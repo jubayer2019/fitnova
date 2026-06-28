@@ -35,7 +35,7 @@ export default function AllClasses() {
   const filtered = useMemo(() => {
     let arr = classes;
     // Server handles filtering and pagination. But if sort isn't supported on server, we can sort locally for this page
-    if (sort === "popular") arr = [...arr].sort((a, b) => (b.bookingsCount || 0) - (a.bookingsCount || 0));
+    if (sort === "popular") arr = [...arr].sort((a, b) => (b.bookingCount || 0) - (a.bookingCount || 0));
     if (sort === "price-asc") arr = [...arr].sort((a, b) => a.price - b.price);
     if (sort === "price-desc") arr = [...arr].sort((a, b) => b.price - a.price);
     return arr;

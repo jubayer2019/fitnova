@@ -15,7 +15,7 @@ export default function ClassCard({ cls, isFavorite, onFavorite }) {
       <Link href={`/classes/${cls._id || cls.id}`} className="relative block aspect-[16/10] overflow-hidden">
         <img
           src={cls.image}
-          alt={cls.title}
+          alt={cls.className || cls.title}
           loading="lazy"
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
@@ -31,7 +31,7 @@ export default function ClassCard({ cls, isFavorite, onFavorite }) {
           </button>
         )}
         <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white">
-          <h3 className="text-lg font-semibold drop-shadow">{cls.title}</h3>
+          <h3 className="text-lg font-semibold drop-shadow">{cls.className || cls.title}</h3>
         </div>
       </Link>
 
@@ -46,8 +46,8 @@ export default function ClassCard({ cls, isFavorite, onFavorite }) {
 
         <div className="mt-4 grid grid-cols-3 gap-2 text-xs text-muted-foreground">
           <div className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" /> {cls.duration}m</div>
-          <div className="flex items-center gap-1"><Flame className="h-3.5 w-3.5" /> {cls.difficulty}</div>
-          <div className="flex items-center gap-1"><Users2 className="h-3.5 w-3.5" /> {cls.bookingsCount || cls.bookings || 0}</div>
+          <div className="flex items-center gap-1"><Flame className="h-3.5 w-3.5" /> {cls.difficultyLevel || cls.difficulty}</div>
+          <div className="flex items-center gap-1"><Users2 className="h-3.5 w-3.5" /> {cls.bookingCount || cls.bookings || 0}</div>
         </div>
 
         <div className="mt-auto flex items-center justify-between pt-5">

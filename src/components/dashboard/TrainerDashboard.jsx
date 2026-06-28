@@ -23,7 +23,7 @@ export default function TrainerDashboard() {
 
   const isLoading = isClasses || isPosts || isBookings;
 
-  const studentsByClass = (classId) => myBookings.filter((b) => b.classId && b.classId._id === classId).map((b) => b.userId).filter(Boolean);
+  const studentsByClass = (classId) => myBookings.filter((b) => b.classId && (b.classId._id === classId || b.classId === classId)).map((b) => b.userId).filter(Boolean);
   const totalStudents = myClasses.reduce((acc, c) => acc + studentsByClass(c._id).length, 0);
 
   const [showAdd, setShowAdd] = useState(false);
@@ -110,14 +110,17 @@ export default function TrainerDashboard() {
     setShowEdit(c);
   };
 
-  const [postForm, setPostForm] = useState({ title: "", category: "Strength", excerpt: "", body: "", image: "" });
+  const [postForm, setPostForm] = useState({ title: "", category: "Strength", description: "", image: "" });
 
   const mutAddPost = useMutation({
     mutationFn: createPost,
     onSuccess: () => {
       toast.success("Post published.");
       queryClient.invalidateQueries({ queryKey: ["trainer", "posts"] });
-      setPostForm({ title: "", category: "Strength", excerpt: "", body: "", image: "" });
+      setPostForm({ title: "", category: "Strength", description: "", image: "" });
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.message || err.message || "Failed to publish post");
     }
   });
 
@@ -182,7 +185,7 @@ export default function TrainerDashboard() {
                     <div className="flex items-center gap-3">
                       <img src={c.image} alt="" className="h-10 w-12 rounded-md object-cover" />
                       <div>
-                        <p className="font-medium">{c.title}</p>
+                        <p className="font-medium">{c.className || c.title}</p>
                         <p className="text-xs text-muted-foreground">{fmtMoney(c.price)} · {c.duration}m</p>
                       </div>
                     </div>
@@ -224,8 +227,7 @@ export default function TrainerDashboard() {
                 />
               </div>
             </div>
-            <div><Label>Excerpt</Label><Input value={postForm.excerpt} onChange={(e) => setPostForm({ ...postForm, excerpt: e.target.value })} required /></div>
-            <div><Label>Body</Label><Textarea value={postForm.body} onChange={(e) => setPostForm({ ...postForm, body: e.target.value })} required /></div>
+            <div><Label>Body</Label><Textarea value={postForm.description} onChange={(e) => setPostForm({ ...postForm, description: e.target.value })} required /></div>
             <Button type="submit" variant="primary">Publish post</Button>
           </div>
         </form>
@@ -312,7 +314,7 @@ export default function TrainerDashboard() {
         </form>
       </Modal>
 
-      <Modal open={Boolean(showStudents)} onClose={() => setShowStudents(null)} title={`Students · ${showStudents?.title || ""}`}>
+      <Modal open={Boolean(showStudents)} onClose={() => setShowStudents(null)} title={`Students · ${showStudents?.className || showStudents?.title || ""}`}>
         {showStudents && (
           <ul className="space-y-3">
             {studentsByClass(showStudents._id || showStudents.id).length === 0 ? (
