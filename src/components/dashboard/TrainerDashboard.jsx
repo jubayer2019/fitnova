@@ -29,12 +29,12 @@ export default function TrainerDashboard() {
     const cId = classId._id || classId;
     return String(bId) === String(cId);
   }).map((b) => {
-    const u = b.userId || {};
+    const isObj = b.userId && typeof b.userId === 'object';
     return {
-      id: u._id || (typeof b.userId === 'string' ? b.userId : b._id),
-      name: u.name || b.userName || "Student",
-      email: u.email || b.userEmail || "",
-      image: u.image || ""
+      id: isObj ? b.userId._id : b.userId,
+      name: isObj ? (b.userId.name || b.userName) : (b.userName || "Student"),
+      email: isObj ? (b.userId.email || b.userEmail) : (b.userEmail || ""),
+      image: isObj ? (b.userId.image || "") : ""
     };
   });
   const totalStudents = myClasses.reduce((acc, c) => acc + studentsByClass(c._id).length, 0);
@@ -333,8 +333,8 @@ export default function TrainerDashboard() {
             {studentsByClass(showStudents._id || showStudents.id).length === 0 ? (
               <p className="text-sm text-muted-foreground">No students enrolled yet.</p>
             ) : studentsByClass(showStudents._id || showStudents.id).map((s) => (
-              <li key={s._id || s.id} className="flex items-center gap-3 rounded-xl border border-border p-3">
-                <img src={s.image || `https://i.pravatar.cc/150?u=${s.email}`} className="h-10 w-10 rounded-full object-cover" alt="" />
+              <li key={s.id} className="flex items-center gap-3 rounded-xl border border-border p-3">
+                <img src={s.image || `https://i.pravatar.cc/150?u=${s.email}`} className="h-10 w-10 rounded-full object-cover" alt="" referrerPolicy="no-referrer" />
                 <div><p className="text-sm font-medium">{s.name}</p><p className="text-xs text-muted-foreground">{s.email}</p></div>
               </li>
             ))}
