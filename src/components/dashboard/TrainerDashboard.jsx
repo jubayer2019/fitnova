@@ -23,7 +23,20 @@ export default function TrainerDashboard() {
 
   const isLoading = isClasses || isPosts || isBookings;
 
-  const studentsByClass = (classId) => myBookings.filter((b) => b.classId && (b.classId._id === classId || b.classId === classId)).map((b) => b.userId).filter(Boolean);
+  const studentsByClass = (classId) => myBookings.filter((b) => {
+    if (!b.classId) return false;
+    const bId = b.classId._id || b.classId;
+    const cId = classId._id || classId;
+    return String(bId) === String(cId);
+  }).map((b) => {
+    const u = b.userId || {};
+    return {
+      id: u._id || (typeof b.userId === 'string' ? b.userId : b._id),
+      name: u.name || b.userName || "Student",
+      email: u.email || b.userEmail || "",
+      image: u.image || ""
+    };
+  });
   const totalStudents = myClasses.reduce((acc, c) => acc + studentsByClass(c._id).length, 0);
 
   const [showAdd, setShowAdd] = useState(false);
