@@ -82,7 +82,7 @@ export default function UserDashboard() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-muted/40 text-left text-xs uppercase tracking-wider text-muted-foreground">
-              <tr><th className="px-5 py-3">Class</th><th className="px-5 py-3">Trainer</th><th className="px-5 py-3">Date</th><th className="px-5 py-3">Txn</th><th className="px-5 py-3 text-right">Amount</th></tr>
+              <tr><th className="px-5 py-3">Class</th><th className="px-5 py-3">Trainer</th><th className="px-5 py-3">Schedule</th><th className="px-5 py-3 text-right">Amount</th><th className="px-5 py-3 text-right">Actions</th></tr>
             </thead>
             <tbody>
               {myBookings.length === 0 ? (
@@ -90,11 +90,15 @@ export default function UserDashboard() {
               ) : myBookings.map((b) => {
                 return (
                   <tr key={b._id || b.id} className="border-t border-border">
-                    <td className="px-5 py-3"><Link href={`/classes/${b.classId || ""}`} className="font-medium hover:text-primary">{b.className || b.classId?.title || "—"}</Link></td>
+                    <td className="px-5 py-3"><Link href={`/classes/${b.classId?._id || b.classId || ""}`} className="font-medium hover:text-primary">{b.className || b.classId?.title || "—"}</Link></td>
                     <td className="px-5 py-3 text-muted-foreground">{b.trainerName || b.classId?.trainerName || "—"}</td>
-                    <td className="px-5 py-3 text-muted-foreground">{new Date(b.createdAt).toLocaleDateString()}</td>
-                    <td className="px-5 py-3 font-mono text-xs text-muted-foreground">{(b._id || b.id).slice(-6).toUpperCase()}</td>
+                    <td className="px-5 py-3 text-muted-foreground">{b.schedule || b.classId?.schedule || "—"}</td>
                     <td className="px-5 py-3 text-right font-medium">{fmtMoney(b.price || b.amount || 0)}</td>
+                    <td className="px-5 py-3 text-right">
+                      <Button asChild variant="outline" size="sm">
+                        <Link href={`/classes/${b.classId?._id || b.classId || ""}`}>Details</Link>
+                      </Button>
+                    </td>
                   </tr>
                 );
               })}

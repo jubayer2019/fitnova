@@ -23,7 +23,8 @@ import {
   deletePostAdmin,
   approveTrainerAppAdmin,
   rejectTrainerAppAdmin,
-  createClass
+  createClass,
+  createPost
 } from "../../lib/api.js";
 import { monthlyAnalytics, categoryShare, CATEGORIES } from "../../data/mockData.js";
 import { fmtMoney } from "../../utils/helpers.js";
@@ -58,6 +59,23 @@ export default function AdminDashboard() {
     },
     onError: handleError
   });
+
+  const [postForm, setPostForm] = useState({ title: "", category: "Strength", excerpt: "", body: "", image: "" });
+
+  const mutAddPost = useMutation({
+    mutationFn: createPost,
+    onSuccess: () => {
+      toast.success("Post published.");
+      queryClient.invalidateQueries({ queryKey: ["admin", "posts"] });
+      setPostForm({ title: "", category: "Strength", excerpt: "", body: "", image: "" });
+    },
+    onError: handleError
+  });
+
+  const submitPost = (e) => {
+    e.preventDefault();
+    mutAddPost.mutate({ ...postForm, image: postForm.image || "https://images.unsplash.com/photo-1517438476312-10d79c5f2b03?auto=format&fit=crop&w=900&q=70" });
+  };
 
   const onAdd = (e) => {
     e.preventDefault();
@@ -323,8 +341,32 @@ export default function AdminDashboard() {
       </section>
 
       {/* Forum posts */}
-      <section className="rounded-2xl border border-border bg-card">
-        <header className="border-b border-border p-5"><h2 className="text-base font-semibold">Forum posts</h2></header>
+      <section className="grid gap-6 lg:grid-cols-3">
+        <form onSubmit={submitPost} className="rounded-2xl border border-border bg-card p-6">
+          <h2 className="text-base font-semibold">Publish a forum post</h2>
+          <div className="mt-4 grid gap-4">
+            <div><Label>Title</Label><Input value={postForm.title} onChange={(e) => setPostForm({ ...postForm, title: e.target.value })} required /></div>
+            <div>
+              <Label>Category</Label>
+              <Select value={postForm.category} onChange={(e) => setPostForm({ ...postForm, category: e.target.value })}>
+                {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
+              </Select>
+            </div>
+            <div>
+              <ImageUpload
+                label="Cover Image (optional)"
+                value={postForm.image}
+                onChange={(url) => setPostForm({ ...postForm, image: url })}
+              />
+            </div>
+            <div><Label>Excerpt</Label><Input value={postForm.excerpt} onChange={(e) => setPostForm({ ...postForm, excerpt: e.target.value })} required /></div>
+            <div><Label>Body</Label><Textarea value={postForm.body} onChange={(e) => setPostForm({ ...postForm, body: e.target.value })} required /></div>
+            <Button type="submit" variant="primary">Publish post</Button>
+          </div>
+        </form>
+
+        <div className="rounded-2xl border border-border bg-card lg:col-span-2">
+          <header className="border-b border-border p-5"><h2 className="text-base font-semibold">Forum posts</h2></header>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-muted/40 text-left text-xs uppercase tracking-wider text-muted-foreground">
@@ -346,6 +388,7 @@ export default function AdminDashboard() {
               ))}
             </tbody>
           </table>
+        </div>
         </div>
       </section>
 

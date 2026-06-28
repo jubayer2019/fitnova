@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Plus, Users, BookOpen, Eye, Trash2, MessageSquare } from "lucide-react";
+import { Plus, Users, BookOpen, Eye, Trash2, MessageSquare, Edit } from "lucide-react";
 import toast from "react-hot-toast";
 import Badge from "../../components/ui/Badge.jsx";
 import Spinner from "../../components/ui/Spinner.jsx";
@@ -11,7 +11,7 @@ import { CATEGORIES } from "../../data/mockData.js";
 import { fmtMoney } from "../../utils/helpers.js";
 import ImageUpload from "../../components/ImageUpload.jsx";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getMyClasses, deleteMyClass, createClass, getMyPosts, createPost, deleteMyPost, getTrainerBookings } from "../../lib/api.js";
+import { getMyClasses, deleteMyClass, createClass, updateClass, getMyPosts, createPost, deleteMyPost, getTrainerBookings } from "../../lib/api.js";
 
 export default function TrainerDashboard() {
   const { user, allUsers } = useAuth();
@@ -27,8 +27,10 @@ export default function TrainerDashboard() {
   const totalStudents = myClasses.reduce((acc, c) => acc + studentsByClass(c._id).length, 0);
 
   const [showAdd, setShowAdd] = useState(false);
+  const [showEdit, setShowEdit] = useState(null);
   const [showStudents, setShowStudents] = useState(null);
   const [form, setForm] = useState({ title: "", category: "Yoga", price: 20, duration: 60, difficulty: "Beginner", schedule: "", image: "", description: "" });
+  const [editForm, setEditForm] = useState({ title: "", category: "Yoga", price: 20, duration: 60, difficulty: "Beginner", schedule: "", image: "", description: "" });
 
   const mutAddClass = useMutation({
     mutationFn: createClass,
@@ -40,6 +42,18 @@ export default function TrainerDashboard() {
     },
     onError: (err) => {
       toast.error(err.response?.data?.message || err.message || "Failed to submit class");
+    }
+  });
+
+  const mutUpdateClass = useMutation({
+    mutationFn: ({ id, data }) => updateClass(id, data),
+    onSuccess: () => {
+      toast.success("Class updated successfully.");
+      queryClient.invalidateQueries({ queryKey: ["trainer", "classes"] });
+      setShowEdit(null);
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.message || err.message || "Failed to update class");
     }
   });
 
@@ -63,6 +77,37 @@ export default function TrainerDashboard() {
       duration: Number(form.duration), 
       image: form.image || "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=900&q=70" 
     });
+  };
+
+  const onUpdate = (e) => {
+    e.preventDefault();
+    mutUpdateClass.mutate({
+      id: showEdit._id || showEdit.id,
+      data: {
+        className: editForm.title,
+        difficultyLevel: editForm.difficulty,
+        category: editForm.category,
+        schedule: editForm.schedule,
+        description: editForm.description,
+        price: Number(editForm.price),
+        duration: Number(editForm.duration),
+        image: editForm.image || "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=900&q=70"
+      }
+    });
+  };
+
+  const handleEditClick = (c) => {
+    setEditForm({
+      title: c.className || c.title || "",
+      category: c.category || "Yoga",
+      price: c.price || 20,
+      duration: c.duration || 60,
+      difficulty: c.difficultyLevel || c.difficulty || "Beginner",
+      schedule: c.schedule || "",
+      image: c.image || "",
+      description: c.description || ""
+    });
+    setShowEdit(c);
   };
 
   const [postForm, setPostForm] = useState({ title: "", category: "Strength", excerpt: "", body: "", image: "" });
@@ -148,7 +193,8 @@ export default function TrainerDashboard() {
                   <td className="px-5 py-3 text-right">
                     <div className="inline-flex gap-1">
                       <button onClick={() => setShowStudents(c)} className="rounded-md p-2 hover:bg-muted" title="View students"><Eye className="h-4 w-4" /></button>
-                      <button onClick={() => mutDeleteClass.mutate(c._id || c.id)} className="rounded-md p-2 text-destructive hover:bg-muted" title="Delete"><Trash2 className="h-4 w-4" /></button>
+                      <button onClick={() => handleEditClick(c)} className="rounded-md p-2 text-primary hover:bg-muted" title="Edit"><Edit className="h-4 w-4" /></button>
+                      <button onClick={() => { if(window.confirm("Are you sure you want to delete this class?")) mutDeleteClass.mutate(c._id || c.id); }} className="rounded-md p-2 text-destructive hover:bg-muted" title="Delete"><Trash2 className="h-4 w-4" /></button>
                     </div>
                   </td>
                 </tr>
@@ -230,6 +276,38 @@ export default function TrainerDashboard() {
           <div className="sm:col-span-2 flex justify-end gap-2">
             <Button type="button" variant="ghost" onClick={() => setShowAdd(false)}>Cancel</Button>
             <Button type="submit" variant="primary">Submit for approval</Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Edit Class Modal */}
+      <Modal open={Boolean(showEdit)} onClose={() => setShowEdit(null)} title="Update class" maxWidth="max-w-xl">
+        <form onSubmit={onUpdate} className="grid gap-4 sm:grid-cols-2">
+          <div className="sm:col-span-2"><Label>Title</Label><Input value={editForm.title} onChange={(e) => setEditForm({ ...editForm, title: e.target.value })} required /></div>
+          <div><Label>Category</Label>
+            <Select value={editForm.category} onChange={(e) => setEditForm({ ...editForm, category: e.target.value })}>
+              {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
+            </Select>
+          </div>
+          <div><Label>Difficulty</Label>
+            <Select value={editForm.difficulty} onChange={(e) => setEditForm({ ...editForm, difficulty: e.target.value })}>
+              {["Beginner", "Intermediate", "Advanced"].map((d) => <option key={d}>{d}</option>)}
+            </Select>
+          </div>
+          <div><Label>Price ($)</Label><Input type="number" min="0" value={editForm.price} onChange={(e) => setEditForm({ ...editForm, price: e.target.value })} required /></div>
+          <div><Label>Duration (min)</Label><Input type="number" min="10" value={editForm.duration} onChange={(e) => setEditForm({ ...editForm, duration: e.target.value })} required /></div>
+          <div className="sm:col-span-2"><Label>Schedule</Label><Input value={editForm.schedule} onChange={(e) => setEditForm({ ...editForm, schedule: e.target.value })} placeholder="Mon, Wed, Fri • 7:00 AM" required /></div>
+          <div className="sm:col-span-2">
+            <ImageUpload
+              label="Class Image (optional)"
+              value={editForm.image}
+              onChange={(url) => setEditForm({ ...editForm, image: url })}
+            />
+          </div>
+          <div className="sm:col-span-2"><Label>Description</Label><Textarea value={editForm.description} onChange={(e) => setEditForm({ ...editForm, description: e.target.value })} required /></div>
+          <div className="sm:col-span-2 flex justify-end gap-2">
+            <Button type="button" variant="ghost" onClick={() => setShowEdit(null)}>Cancel</Button>
+            <Button type="submit" variant="primary">Update class</Button>
           </div>
         </form>
       </Modal>

@@ -39,6 +39,11 @@ export const createClass = async (data) => {
   return res.data;
 };
 
+export const updateClass = async (id, data) => {
+  const res = await api.patch(`/classes/${id}`, data);
+  return res.data;
+};
+
 export const getMyClasses = async () => {
   const res = await api.get(`/trainer/my-classes?t=${Date.now()}`);
   return res.data.data;

@@ -25,23 +25,23 @@ export default function AllClasses() {
   const [page, setPage] = useState(1);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['classes', { search: q, category: cat === 'all' ? '' : cat, sort, page: 1, limit: 100 }],
-    queryFn: () => getPublicClasses({ search: q, category: cat === 'all' ? '' : cat, sort, page: 1, limit: 100 }),
+    queryKey: ['classes', { search: q, category: cat === 'all' ? '' : cat, sort, page, limit: PER_PAGE }],
+    queryFn: () => getPublicClasses({ search: q, category: cat === 'all' ? '' : cat, sort, page, limit: PER_PAGE }),
   });
 
   const classes = data?.data || [];
+  const totalPages = data?.totalPages || 1;
 
   const filtered = useMemo(() => {
     let arr = classes;
-    // API already filters by approved status, search, and category. Sorting is also mostly handled, but we can double check locally for dynamic feel if we fetched all
+    // Server handles filtering and pagination. But if sort isn't supported on server, we can sort locally for this page
     if (sort === "popular") arr = [...arr].sort((a, b) => (b.bookingsCount || 0) - (a.bookingsCount || 0));
     if (sort === "price-asc") arr = [...arr].sort((a, b) => a.price - b.price);
     if (sort === "price-desc") arr = [...arr].sort((a, b) => b.price - a.price);
     return arr;
   }, [classes, sort]);
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
-  const pageItems = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+  const pageItems = filtered;
 
   const onFavorite = (id) => {
     if (!user) return toast.error("Please log in to favorite classes.");
