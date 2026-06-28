@@ -7,6 +7,7 @@ import { Check, ArrowRight } from "lucide-react";
 import Button from "../../../components/ui/Button.jsx";
 import { api } from "../../../lib/api.js";
 import { useAuth } from "../../../context/AuthContext.jsx";
+import { useQueryClient } from "@tanstack/react-query";
 
 function PaymentSuccessContent() {
   const [status, setStatus] = useState("verifying");
@@ -14,6 +15,7 @@ function PaymentSuccessContent() {
   const router = useRouter();
   const { user } = useAuth();
   const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const sessionId = searchParams.get("session_id");
@@ -28,6 +30,7 @@ function PaymentSuccessContent() {
         const res = await api.get(`/payments/session/${sessionId}`);
         setDetails(res.data.booking);
         setStatus("success");
+        queryClient.invalidateQueries({ queryKey: ['bookings'] });
       } catch (err) {
         console.error(err);
         setStatus("error");
