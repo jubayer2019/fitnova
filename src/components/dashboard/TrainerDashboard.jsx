@@ -210,7 +210,13 @@ export default function TrainerDashboard() {
                     <div className="inline-flex gap-1">
                       <button onClick={() => setShowStudents(c)} className="rounded-md p-2 hover:bg-muted" title="View students"><Eye className="h-4 w-4" /></button>
                       <button onClick={() => handleEditClick(c)} className="rounded-md p-2 text-primary hover:bg-muted" title="Edit"><Edit className="h-4 w-4" /></button>
-                      <button onClick={() => { if(window.confirm("Are you sure you want to delete this class?")) mutDeleteClass.mutate(c._id || c.id); }} className="rounded-md p-2 text-destructive hover:bg-muted" title="Delete"><Trash2 className="h-4 w-4" /></button>
+                      <button onClick={() => { 
+                        if (studentsByClass(c._id || c.id).length > 0) {
+                          toast.error("You cannot delete this class. There are students who have enrolled in this class.");
+                        } else if (window.confirm("Are you sure you want to delete this class?")) {
+                          mutDeleteClass.mutate(c._id || c.id); 
+                        }
+                      }} className="rounded-md p-2 text-destructive hover:bg-muted" title="Delete"><Trash2 className="h-4 w-4" /></button>
                     </div>
                   </td>
                 </tr>
